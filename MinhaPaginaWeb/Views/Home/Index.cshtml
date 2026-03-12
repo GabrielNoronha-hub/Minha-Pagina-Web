@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="app" class="text-center">
+    <h1 class="display-4">{{ mensagem }}</h1>
+
+    <div class="mt-4">
+        <input v-model="novoItem" class="form-control d-inline-block w-25" placeholder="Novo elemento...">
+        <button v-on:click="adicionar" class="btn btn-success">Inserir</button>
+    </div>
+
+    <ul class="list-group mt-3">
+        <li v-for="item in lista" class="list-group-item">
+            {{ item }}
+        </li>
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                    mensagem: 'Meu CRUD com Vue e C#',
+                    novoItem: '',
+                    lista: ['Elemento 1', 'Elemento 2'] // Isso viria do seu banco futuramente
+                }
+            },
+            methods: {
+                adicionar() {
+                    if (this.novoItem.trim() !== '') {
+                        this.lista.push(this.novoItem);
+                        this.novoItem = '';
+                    }
+                }
+            }
+        }).mount('#app')
+    </script>
+}
