@@ -1,39 +1,118 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Meu Currículo Interativo";
 }
 
-<div id="app" class="text-center">
-    <h1 class="display-4">{{ mensagem }}</h1>
+<style>
+    body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .sidebar { background: #2c3e50; color: white; min-height: 100vh; padding: 2rem; }
+    .profile-img { width: 150px; height: 150px; object-fit: cover; border: 4px solid #18bc9c; }
+    .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+    .badge-tech { background-color: #18bc9c; color: white; margin-right: 5px; }
+</style>
 
-    <div class="mt-4">
-        <input v-model="novoItem" class="form-control d-inline-block w-25" placeholder="Novo elemento...">
-        <button v-on:click="adicionar" class="btn btn-success">Inserir</button>
+<div id="app" class="container-fluid">
+    <div class="row">
+        <aside class="col-md-3 sidebar text-center">
+            <img :src="fotoUrl" class="rounded-circle profile-img mb-3" alt="Foto de Perfil">
+            <h2 class="h4">{{ nome }}</h2>
+            <p class="text-muted" style="color: #bdc3c7 !important;">{{ cargo }}</p>
+            
+            <hr class="bg-light">
+            
+            <div class="text-start">
+                <h6><strong>Contato</strong></h6>
+                <p class="small">📧 {{ email }}</p>
+                <p class="small">🔗 {{ linkedin }}</p>
+            </div>
+
+            <div class="mt-4 text-start">
+                <h6><strong>Habilidades</strong></h6>
+                <div class="d-flex flex-wrap">
+                    <span v-for="skill in habilidades" class="badge badge-tech mb-2">{{ skill }}</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="col-md-9 p-5">
+            <section>
+                <h3 class="display-5">Sobre Mim</h3>
+                <p class="lead">{{ sobre }}</p>
+            </section>
+
+            <hr class="my-5">
+
+            <section>
+                <h3 class="mb-4">Experiência Profissional</h3>
+                
+                <div v-for="(exp, index) in experiencias" :key="index" class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title text-primary">{{ exp.funcao }}</h5>
+                            <span class="text-muted">{{ exp.periodo }}</span>
+                        </div>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ exp.empresa }}</h6>
+                        <p class="card-text">{{ exp.descricao }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-5 p-4 border rounded bg-white">
+                    <h5>Adicionar Experiência (Teste o Vue aqui)</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input v-model="novaExp.funcao" class="form-control" placeholder="Cargo">
+                        </div>
+                        <div class="col-md-4">
+                            <input v-model="novaExp.empresa" class="form-control" placeholder="Empresa">
+                        </div>
+                        <div class="col-md-4">
+                            <button @@click="adicionarExp" class="btn btn-success w-100">Adicionar à Lista</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-
-    <ul class="list-group mt-3">
-        <li v-for="item in lista" class="list-group-item">
-            {{ item }}
-        </li>
-    </ul>
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <script>
         const { createApp } = Vue
 
         createApp({
             data() {
                 return {
-                    mensagem: 'Meu CRUD com Vue e C#',
-                    novoItem: '',
-                    lista: ['Elemento 1', 'Elemento 2'] // Isso viria do seu banco futuramente
+                    nome: 'Seu Nome Aqui',
+                    cargo: 'Desenvolvedor Full Stack',
+                    email: 'contato@dev.com.br',
+                    linkedin: 'linkedin.com/in/seuusuario',
+                    fotoUrl: 'https://via.placeholder.com/150', // Coloque o link da sua foto real
+                    sobre: 'Desenvolvedor focado em soluções escaláveis com C# e ecossistema Javascript. Amante de arquitetura limpa e Docker.',
+                    habilidades: ['C#', '.NET Core', 'Vue.js', 'SQL Server', 'Docker', 'Git'],
+                    
+                    // Lista inicial de experiências
+                    experiencias: [
+                        { 
+                            funcao: 'Desenvolvedor Júnior', 
+                            empresa: 'Tech Solutions', 
+                            periodo: '2023 - Atualmente', 
+                            descricao: 'Atuação no backend com ASP.NET e frontend com Vue.' 
+                        }
+                    ],
+
+                    // Objeto para o formulário de nova experiência
+                    novaExp: { funcao: '', empresa: '', periodo: '2026', descricao: 'Nova experiência adicionada via Vue.' }
                 }
             },
             methods: {
-                adicionar() {
-                    if (this.novoItem.trim() !== '') {
-                        this.lista.push(this.novoItem);
-                        this.novoItem = '';
+                adicionarExp() {
+                    if (this.novaExp.funcao && this.novaExp.empresa) {
+                        // Adiciona uma cópia do objeto à lista
+                        this.experiencias.unshift({...this.novaExp});
+                        // Limpa os campos
+                        this.novaExp.funcao = '';
+                        this.novaExp.empresa = '';
                     }
                 }
             }
