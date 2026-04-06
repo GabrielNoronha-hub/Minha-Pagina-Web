@@ -18,6 +18,11 @@ namespace MinhaPaginaWeb.Controllers
             return View();
         }
 
+        public IActionResult Projetos()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
