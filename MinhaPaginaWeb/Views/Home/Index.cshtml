@@ -69,6 +69,15 @@
                         </div>
                     </div>
                 </div>
+
+                <link href="https://cdn.jsdelivr.net/npm/@@n8n/chat@0/dist/style.css" rel="stylesheet" />
+                <script type="module">
+                    import { createChat } from 'https://cdn.jsdelivr.net/npm/@@n8n/chat@0/dist/chat.bundle.es.js';
+
+                    createChat({
+                        webhookUrl: 'https://gabrielnoronha01.app.n8n.cloud/webhook/5a257916-fdf2-4b28-a2fd-b07560c358a9/chat'
+                    });
+                </script>
             </section>
         </main>
     </div>
